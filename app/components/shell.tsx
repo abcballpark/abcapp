@@ -27,11 +27,35 @@ interface ShellProps {
 
 export function Shell(props: ShellProps) {
   const mobileNav = useDisclosure();
+  const links = [
+    { href: "#", label: "Home" },
+    { href: "/baseball", label: "Baseball" },
+    { href: "/softball", label: "Softball" },
+    { href: "/soccer", label: "Soccer" },
+    { href: "/basketball", label: "Basketball" },
+    { href: "/about", label: "About ABC" },
+  ];
+
   return (
     <AppShell
       navbar={
         <Navbar position="sticky">
-          {/* <NavbarBrand>Brand</NavbarBrand> */}
+          <NavbarBrand>ABC</NavbarBrand>
+          <NavbarContent>
+            <NavbarItem>
+              <Button variant="primary">Sign Up!</Button>
+            </NavbarItem>
+          </NavbarContent>
+          <NavbarContent
+            justifyContent="end"
+            display={{ base: "none", sm: "flex" }}
+          >
+            {links.map((link) => (
+              <NavbarItem key={link.href}>
+                <NavbarLink href={link.href}>{link.label}</NavbarLink>
+              </NavbarItem>
+            ))}
+          </NavbarContent>
           <Button
             display={{ base: "inline-flex", sm: "none" }}
             variant="ghost"
@@ -39,23 +63,6 @@ export function Shell(props: ShellProps) {
           >
             {mobileNav.isOpen ? <FiX /> : <FiMenu />}
           </Button>
-          <NavbarContent display={{ base: "none", sm: "flex" }}>
-            <NavbarItem>
-              <NavbarLink isActive href="#">
-                Home
-              </NavbarLink>
-            </NavbarItem>
-            <NavbarItem>
-              <NavbarLink isActive href="#">
-                Programs
-              </NavbarLink>
-            </NavbarItem>
-            <NavbarItem>
-              <NavbarLink isActive href="#">
-                Register
-              </NavbarLink>
-            </NavbarItem>
-          </NavbarContent>
           <Drawer {...mobileNav}>
             <DrawerOverlay />
             <DrawerContent>
@@ -64,17 +71,11 @@ export function Shell(props: ShellProps) {
               </DrawerHeader>
               <DrawerBody fontSize="md">
                 <NavbarContent flexDirection="column" justifyContent="stretch">
-                  <NavbarItem>
-                    <NavbarLink isActive href="#">
-                      Home
-                    </NavbarLink>
-                  </NavbarItem>
-                  <NavbarItem>
-                    <NavbarLink href="#">Programs</NavbarLink>
-                  </NavbarItem>
-                  <NavbarItem>
-                    <NavbarLink href="#">Register</NavbarLink>
-                  </NavbarItem>
+                  {links.map((link) => (
+                    <NavbarItem key={link.href}>
+                      <NavbarLink href={link.href}>{link.label}</NavbarLink>
+                    </NavbarItem>
+                  ))}
                 </NavbarContent>
               </DrawerBody>
             </DrawerContent>
