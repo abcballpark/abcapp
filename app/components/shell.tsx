@@ -41,8 +41,14 @@ export function Shell(props: ShellProps) {
 
   return (
     <AppShell
+      variant="static"
       navbar={
-        <Navbar position="sticky" borderBottomWidth="1px">
+        <Navbar
+          position="sticky"
+          background="transparent"
+          backdropFilter="blur(20px)"
+          borderBottomWidth="1px"
+        >
           <NavbarBrand>ABC</NavbarBrand>
           <NavbarContent>
             <NavbarItem>
