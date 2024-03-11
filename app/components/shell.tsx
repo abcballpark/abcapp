@@ -22,6 +22,7 @@ import {
 } from "@saas-ui/react";
 import { FiX, FiMenu } from "react-icons/fi";
 import React from "react";
+import { UserMenu } from "./userMenu";
 
 interface ShellProps {
   children?: React.ReactNode;
@@ -30,7 +31,7 @@ interface ShellProps {
 export function Shell(props: ShellProps) {
   const mobileNav = useDisclosure();
   const links = [
-    { href: "#", label: "Home" },
+    { href: "/", label: "Home" },
     { href: "/baseball", label: "Baseball" },
     { href: "/softball", label: "Softball" },
     { href: "/soccer", label: "Soccer" },
@@ -55,13 +56,16 @@ export function Shell(props: ShellProps) {
               </NavbarItem>
             ))}
           </NavbarContent>
-          <Button
-            display={{ base: "inline-flex", sm: "none" }}
-            variant="ghost"
-            onClick={mobileNav.onToggle}
-          >
-            {mobileNav.isOpen ? <FiX /> : <FiMenu />}
-          </Button>
+          <NavbarContent justifyContent="end">
+            <UserMenu />
+            <Button
+              display={{ base: "inline-flex", sm: "none" }}
+              variant="ghost"
+              onClick={mobileNav.onToggle}
+            >
+              {mobileNav.isOpen ? <FiX /> : <FiMenu />}
+            </Button>
+          </NavbarContent>
           <Drawer {...mobileNav}>
             <DrawerOverlay />
             <DrawerContent>
@@ -90,6 +94,7 @@ export function Shell(props: ShellProps) {
           display="flex"
           flexDirection="column"
           margin="0 auto"
+          alignContent="center"
         >
           {props.children}
         </Container>
