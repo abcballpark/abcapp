@@ -1,7 +1,9 @@
 "use client";
 
 import {
+  Box,
   Button,
+  Container,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -39,17 +41,14 @@ export function Shell(props: ShellProps) {
   return (
     <AppShell
       navbar={
-        <Navbar position="sticky">
+        <Navbar position="sticky" borderBottomWidth="1px">
           <NavbarBrand>ABC</NavbarBrand>
           <NavbarContent>
             <NavbarItem>
               <Button variant="primary">Sign Up!</Button>
             </NavbarItem>
           </NavbarContent>
-          <NavbarContent
-            justifyContent="end"
-            display={{ base: "none", sm: "flex" }}
-          >
+          <NavbarContent justifyContent="end" display={{ base: "none", sm: "flex" }}>
             {links.map((link) => (
               <NavbarItem key={link.href}>
                 <NavbarLink href={link.href}>{link.label}</NavbarLink>
@@ -82,6 +81,19 @@ export function Shell(props: ShellProps) {
           </Drawer>
         </Navbar>
       }
-    />
+    >
+      <Box as="main" flex="1" py="2" px="4">
+        <Container
+          maxW="container.xl"
+          pt="8"
+          px="8"
+          display="flex"
+          flexDirection="column"
+          margin="0 auto"
+        >
+          {props.children}
+        </Container>
+      </Box>
+    </AppShell>
   );
 }
