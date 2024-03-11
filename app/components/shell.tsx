@@ -46,7 +46,7 @@ export function Shell(props: ShellProps) {
           <NavbarBrand>ABC</NavbarBrand>
           <NavbarContent>
             <NavbarItem>
-              <Button variant="primary">Sign Up!</Button>
+              <NavbarLink href="/signup">Sign Up!</NavbarLink>
             </NavbarItem>
           </NavbarContent>
           <NavbarContent justifyContent="end" display={{ base: "none", sm: "flex" }}>
