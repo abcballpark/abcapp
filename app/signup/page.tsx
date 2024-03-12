@@ -32,8 +32,18 @@ export default function Signup() {
       <FormLayout>
         <Heading size="md">Parent/Guardian Info</Heading>
         <FormLayout columns={{ md: 2, sm: 1 }}>
-          <Field label="First Name" name="parent_firstName" rules={{ required: true }} />
-          <Field label="Last Name" name="parent_lastName" rules={{ required: true }} />
+          <Field
+            label="First Name"
+            name="parent_firstName"
+            rules={{ required: true }}
+            defaultValue={user?.firstName || ""}
+          />
+          <Field
+            label="Last Name"
+            name="parent_lastName"
+            rules={{ required: true }}
+            defaultValue={user?.lastName || ""}
+          />
         </FormLayout>
         <FormLayout columns={{ md: 2, sm: 1 }}>
           <Field
@@ -70,6 +80,7 @@ export default function Signup() {
             name="player_lastName"
             rules={{ required: true }}
           />
+          {/* TODO(kevin): Put some validation for min/max ages */}
           <FormControl>
             <FormLabel>Player Birthdate</FormLabel>
             <DateInput name="player_birthdate" rules={{ required: true }} />
