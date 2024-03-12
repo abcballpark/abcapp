@@ -23,20 +23,29 @@ import {
 import { FiX, FiMenu } from "react-icons/fi";
 import React from "react";
 import { UserMenu } from "./userMenu";
+import { AccountMenu } from "./accountMenu";
+import { SignInButton, UserButton, useUser } from "@clerk/clerk-react";
+import { NavLink } from "./NavLink";
 
 interface ShellProps {
   children?: React.ReactNode;
 }
 
 export function Shell(props: ShellProps) {
+  const { isSignedIn, user, isLoaded } = useUser();
   const mobileNav = useDisclosure();
-  const links = [
+  const navLinks: NavLink[] = [
     { href: "/", label: "Home" },
     { href: "/baseball", label: "Baseball" },
     { href: "/softball", label: "Softball" },
     { href: "/soccer", label: "Soccer" },
     { href: "/basketball", label: "Basketball" },
     { href: "/about", label: "About ABC" },
+  ];
+
+  const accountLinks: NavLink[] = [
+    { href: "/account/players", label: "Players" },
+    { href: "/account/teams", label: "Teams" },
   ];
 
   return (
@@ -56,14 +65,21 @@ export function Shell(props: ShellProps) {
             </NavbarItem>
           </NavbarContent>
           <NavbarContent justifyContent="end" display={{ base: "none", sm: "flex" }}>
-            {links.map((link) => (
+            {navLinks.map((link) => (
               <NavbarItem key={link.href}>
                 <NavbarLink href={link.href}>{link.label}</NavbarLink>
               </NavbarItem>
             ))}
           </NavbarContent>
-          <NavbarContent justifyContent="end">
-            <UserMenu />
+          <NavbarContent justifyContent="end" spacing={2}>
+            {isSignedIn ? <AccountMenu links={accountLinks} /> : <></>}
+            {isSignedIn ? (
+              <UserButton afterSignOutUrl="/" />
+            ) : (
+              <SignInButton>
+                <Button variant="primary">Login</Button>
+              </SignInButton>
+            )}
             <Button
               display={{ base: "inline-flex", sm: "none" }}
               variant="ghost"
@@ -80,7 +96,7 @@ export function Shell(props: ShellProps) {
               </DrawerHeader>
               <DrawerBody fontSize="md">
                 <NavbarContent flexDirection="column" justifyContent="stretch">
-                  {links.map((link) => (
+                  {navLinks.map((link) => (
                     <NavbarItem key={link.href}>
                       <NavbarLink href={link.href}>{link.label}</NavbarLink>
                     </NavbarItem>

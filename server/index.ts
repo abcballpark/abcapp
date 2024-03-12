@@ -1,7 +1,7 @@
 import { publicProcedure, protectedProcedure, router } from "./trpc";
 
 export const appRouter = router({
-  getStuff: protectedProcedure.query(async () => {
+  getStuff: publicProcedure.query(async () => {
     return [1, 2, 3];
   }),
 });
