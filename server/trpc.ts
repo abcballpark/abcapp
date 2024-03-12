@@ -1,6 +1,87 @@
-import { initTRPC } from "@trpc/server";
+import { TRPCError, initTRPC } from "@trpc/server";
+import {
+  SignedInAuthObject,
+  SignedOutAuthObject,
+  currentUser,
+} from "@clerk/nextjs/server";
+import { NextRequest } from "next/server";
 
-const t = initTRPC.create();
+import { db } from "@/db";
+
+type AuthContext = SignedInAuthObject | SignedOutAuthObject;
+
+type CreateContextOptions = {
+  headers: Headers;
+  auth: AuthContext;
+  req?: NextRequest;
+};
+
+export const createInnerTRPCContext = (opts: CreateContextOptions) => {
+  return {
+    ...opts,
+    db,
+  };
+};
+
+export const createTRPCContext = async (opts: {
+  headers: Headers;
+  auth: AuthContext;
+  req?: NextRequest;
+}) => {
+  return createInnerTRPCContext({
+    auth: opts.auth,
+    req: opts.req,
+    headers: opts.headers,
+  });
+};
+
+export const t = initTRPC.context<typeof createTRPCContext>().create();
 
 export const router = t.router;
+
 export const publicProcedure = t.procedure;
+
+const isAuthenticated = t.middleware(({ next, ctx }) => {
+  if (!ctx.auth?.userId) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "You must be logged in to do that.",
+    });
+  }
+  return next({
+    ctx: {
+      auth: {
+        ...ctx.auth,
+        userId: ctx.auth.userId,
+      },
+    },
+  });
+});
+
+export const protectedProcedure = t.procedure.use(isAuthenticated);
+
+// TODO(kevin): Adapt this for other means (e.g. roles)
+const isAuthor = t.middleware(({ next, ctx }) => {
+  // Check if user is an author
+  const isAuthor = currentUser().then((user) => {
+    if (!user) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "You must be an author to do that.",
+      });
+    }
+    return user.publicMetadata.author;
+  });
+
+  return next({
+    ctx: {
+      auth: {
+        ...ctx.auth,
+        userId: ctx.auth.userId,
+        isAuthor,
+      },
+    },
+  });
+});
+
+export const authorProcedure = t.procedure.use(isAuthor);

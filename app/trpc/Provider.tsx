@@ -4,6 +4,7 @@ import { httpBatchLink } from "@trpc/client";
 import React, { useState } from "react";
 
 import { trpc } from "./client";
+import { TRPC_BASE_URL } from "@/constants";
 
 interface TrpcProviderProps {
   children: React.ReactNode;
@@ -15,7 +16,7 @@ export default function TrpcProvider(props: TrpcProviderProps) {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: "/api/trpc",
+          url: TRPC_BASE_URL,
         }),
       ],
     })
