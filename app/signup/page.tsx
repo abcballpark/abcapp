@@ -10,21 +10,39 @@ import {
   ArrayFieldRowContainer,
   ArrayFieldRemoveButton,
   SubmitButton,
+  useFormContext,
+  useSnackbar,
 } from "@saas-ui/react";
 import { DateInput } from "@saas-ui/date-picker";
 import { useUser } from "@clerk/clerk-react";
-import { FormControl, FormLabel, Heading } from "@chakra-ui/react";
-import { Key } from "react";
+import { FormLabel, FormControl, Heading } from "@chakra-ui/react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+import { trpc } from "@/app/trpc/client";
 
 export default function Signup() {
-  const onSubmit = (params: any) => {
-    console.log(params);
-  };
-
   const { user } = useUser();
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const snackbar = useSnackbar();
+  const addPlayer = trpc.addAccountPlayer.useMutation();
 
-  const columnLayout = (cols: number) => {
-    return { base: cols, xs: 1 };
+  const onSubmit = (params: any) => {
+    setLoading(true);
+    // This gets rewritten by the server, just here for validation purposes.
+    // We could compare the values to detect tampering.
+    params.userId = user?.id;
+    try {
+      // Insert the new player
+      addPlayer.mutate(params);
+      setLoading(false);
+      snackbar.success(`${params.playerFirstName} added!`);
+      router.push("/account/players");
+    } catch (error) {
+      setLoading(false);
+      snackbar.error("Error adding player");
+    }
   };
 
   return (
@@ -34,13 +52,13 @@ export default function Signup() {
         <FormLayout columns={{ md: 2, sm: 1 }}>
           <Field
             label="First Name"
-            name="parent_firstName"
+            name="parentFirstName"
             rules={{ required: true }}
             defaultValue={user?.firstName || ""}
           />
           <Field
             label="Last Name"
-            name="parent_lastName"
+            name="parentLastName"
             rules={{ required: true }}
             defaultValue={user?.lastName || ""}
           />
@@ -48,14 +66,14 @@ export default function Signup() {
         <FormLayout columns={{ md: 2, sm: 1 }}>
           <Field
             label="Email"
-            name="email"
+            name="parentEmail"
             type="email"
             rules={{ required: true }}
             defaultValue={user?.primaryEmailAddress?.emailAddress}
           />
           <Field
             label="Phone"
-            name="phone"
+            name="parentPhone"
             type="phone"
             rules={{ required: true }}
             defaultValue={user?.primaryPhoneNumber?.phoneNumber}
@@ -64,7 +82,7 @@ export default function Signup() {
         <FormLayout>
           <Field
             label="I'm willing to help coach or manage a team"
-            name="coach"
+            name="canCoach"
             type="checkbox"
           />
         </FormLayout>
@@ -72,21 +90,28 @@ export default function Signup() {
         <FormLayout columns={{ md: 3, sm: 1 }}>
           <Field
             label="Player First Name"
-            name="player_firstName"
+            name="playerFirstName"
             rules={{ required: true }}
           />
           <Field
             label="Player Last Name"
-            name="player_lastName"
+            name="playerLastName"
+            rules={{ required: true }}
+          />
+          <Field
+            label="Player Birthdate"
+            name="playerBirthdate"
             rules={{ required: true }}
           />
           {/* TODO(kevin): Put some validation for min/max ages */}
-          <FormControl>
+          {/* <FormControl>
             <FormLabel>Player Birthdate</FormLabel>
-            <DateInput name="player_birthdate" rules={{ required: true }} />
-          </FormControl>
+            <DateInput name="playerBirthdate" rules={{ required: true }} />
+          </FormControl> */}
         </FormLayout>
-        <SubmitButton>Submit</SubmitButton>
+        <SubmitButton isLoading={loading} disableIfInvalid>
+          {loading ? "Loading" : "Submit"}
+        </SubmitButton>
       </FormLayout>
     </Form>
   );

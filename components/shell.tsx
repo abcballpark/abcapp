@@ -22,8 +22,7 @@ import {
 } from "@saas-ui/react";
 import { FiX, FiMenu } from "react-icons/fi";
 import React from "react";
-import { UserMenu } from "./userMenu";
-import { AccountMenu } from "./accountMenu";
+import { AccountMenu } from "./AccountMenu";
 import { SignInButton, UserButton, useUser } from "@clerk/clerk-react";
 import { NavLink } from "./NavLink";
 

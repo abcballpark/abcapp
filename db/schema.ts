@@ -1,4 +1,12 @@
-import { pgTable, serial, text, timestamp, uniqueIndex } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  serial,
+  text,
+  boolean,
+  date,
+  timestamp,
+  uniqueIndex,
+} from "drizzle-orm/pg-core";
 import { InferSelectModel, InferInsertModel } from "drizzle-orm";
 
 export const PlayersTable = pgTable("Players", {
@@ -8,6 +16,7 @@ export const PlayersTable = pgTable("Players", {
   parentLastName: text("parentLastName").notNull(),
   parentEmail: text("parentEmail").notNull(),
   parentPhone: text("parentPhone").notNull(),
+  canCoach: boolean("canCoach").notNull(),
   playerFirstName: text("playerFirstName").notNull(),
   playerLastName: text("playerLastName").notNull(),
   playerBirthdate: text("playerBirthdate").notNull(),

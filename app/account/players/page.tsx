@@ -1,12 +1,21 @@
 "use client";
+import { Flex, Heading } from "@chakra-ui/react";
+
+import { Player } from "@/components";
 import { trpc } from "@/app/trpc/client";
 
 export default function Players() {
-  const getStuff = trpc.getStuff.useQuery();
+  const players = trpc.getAccountPlayers.useQuery();
 
   return (
-    <div>
-      <div>{JSON.stringify(getStuff.data)}</div>
-    </div>
+    <>
+      <Heading>My Players</Heading>
+      <br />
+      <Flex>
+        {players.data?.map((player) => (
+          <Player key={player.id} player={player} />
+        ))}
+      </Flex>
+    </>
   );
 }
