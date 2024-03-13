@@ -48,46 +48,8 @@ export default function Signup() {
   return (
     <Form onSubmit={onSubmit}>
       <FormLayout>
-        <Heading size="md">Parent/Guardian Info</Heading>
-        <FormLayout columns={{ md: 2, sm: 1 }}>
-          <Field
-            label="First Name"
-            name="parentFirstName"
-            rules={{ required: true }}
-            defaultValue={user?.firstName || ""}
-          />
-          <Field
-            label="Last Name"
-            name="parentLastName"
-            rules={{ required: true }}
-            defaultValue={user?.lastName || ""}
-          />
-        </FormLayout>
-        <FormLayout columns={{ md: 2, sm: 1 }}>
-          <Field
-            label="Email"
-            name="parentEmail"
-            type="email"
-            rules={{ required: true }}
-            defaultValue={user?.primaryEmailAddress?.emailAddress}
-          />
-          <Field
-            label="Phone"
-            name="parentPhone"
-            type="phone"
-            rules={{ required: true }}
-            defaultValue={user?.primaryPhoneNumber?.phoneNumber}
-          />
-        </FormLayout>
-        <FormLayout>
-          <Field
-            label="I'm willing to help coach or manage a team"
-            name="canCoach"
-            type="checkbox"
-          />
-        </FormLayout>
         <Heading size="md">Player Info</Heading>
-        <FormLayout columns={{ md: 3, sm: 1 }}>
+        <FormLayout columns={{ md: 4, sm: 1 }}>
           <Field
             label="Player First Name"
             name="playerFirstName"
@@ -103,11 +65,23 @@ export default function Signup() {
             name="playerBirthdate"
             rules={{ required: true }}
           />
+          <Field
+            label="Jersey Number Preference"
+            name="jerseyNumberPreference"
+            rules={{ required: false }}
+          />
           {/* TODO(kevin): Put some validation for min/max ages */}
           {/* <FormControl>
             <FormLabel>Player Birthdate</FormLabel>
             <DateInput name="playerBirthdate" rules={{ required: true }} />
           </FormControl> */}
+        </FormLayout>
+        <FormLayout>
+          <Field
+            label="I'm willing to help coach or manage a team"
+            name="canCoach"
+            type="checkbox"
+          />
         </FormLayout>
         <SubmitButton isLoading={loading} disableIfInvalid>
           {loading ? "Loading" : "Submit"}

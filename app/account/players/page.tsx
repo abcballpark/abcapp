@@ -1,5 +1,5 @@
 "use client";
-import { Flex, Heading } from "@chakra-ui/react";
+import { Wrap, WrapItem, Heading } from "@chakra-ui/react";
 
 import { Player } from "@/components";
 import { trpc } from "@/app/trpc/client";
@@ -11,11 +11,20 @@ export default function Players() {
     <>
       <Heading>My Players</Heading>
       <br />
-      <Flex>
+      <Wrap>
         {players.data?.map((player) => (
-          <Player key={player.id} player={player} />
+          <WrapItem>
+            <Player
+              key={player.id}
+              playerFirstName={player.playerFirstName}
+              playerLastName={player.playerLastName}
+              playerBirthdate={player.playerBirthdate}
+              jerseyNumberPreference={player.jerseyNumberPreference}
+              canCoach={player.canCoach}
+            />
+          </WrapItem>
         ))}
-      </Flex>
+      </Wrap>
     </>
   );
 }

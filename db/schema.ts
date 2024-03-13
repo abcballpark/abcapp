@@ -2,25 +2,34 @@ import {
   pgTable,
   serial,
   text,
+  integer,
   boolean,
   date,
   timestamp,
   uniqueIndex,
 } from "drizzle-orm/pg-core";
-import { InferSelectModel, InferInsertModel } from "drizzle-orm";
+import { sql, InferSelectModel, InferInsertModel } from "drizzle-orm";
 
 export const PlayersTable = pgTable("Players", {
   id: serial("id").primaryKey(),
-  userId: text("userId").notNull(),
-  parentFirstName: text("parentFirstName").notNull(),
-  parentLastName: text("parentLastName").notNull(),
-  parentEmail: text("parentEmail").notNull(),
-  parentPhone: text("parentPhone").notNull(),
-  canCoach: boolean("canCoach").notNull(),
   playerFirstName: text("playerFirstName").notNull(),
   playerLastName: text("playerLastName").notNull(),
   playerBirthdate: text("playerBirthdate").notNull(),
+  jerseyNumberPreference: text("jerseyNumberPreference"),
+  createdOn: timestamp("createdOn")
+    .notNull()
+    .default(sql`now()`),
 });
 
 export type Player = InferSelectModel<typeof PlayersTable>;
 export type NewPlayer = InferInsertModel<typeof PlayersTable>;
+
+export const UserPlayersTable = pgTable("UserPlayers", {
+  id: serial("id").primaryKey(),
+  userId: text("userId").notNull(),
+  playerId: integer("playerId").notNull(),
+  canCoach: boolean("canCoach").notNull().default(false),
+});
+
+export type UserPlayer = InferSelectModel<typeof UserPlayersTable>;
+export type NewUserPlayer = InferInsertModel<typeof UserPlayersTable>;
