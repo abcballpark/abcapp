@@ -1,4 +1,12 @@
-import { Button, Link, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import {
+  Button,
+  Link,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+} from "@chakra-ui/react";
 import { ChevronDownIcon } from "@saas-ui/react";
 import { type NavLink } from "./NavLink";
 
@@ -7,6 +15,7 @@ interface AccountMenuProps {
 }
 
 export function AccountMenu(props: AccountMenuProps) {
+  const isAdmin = true;
   return (
     <Menu>
       <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
@@ -18,6 +27,14 @@ export function AccountMenu(props: AccountMenuProps) {
             <MenuItem>{link.label}</MenuItem>
           </Link>
         ))}
+        {isAdmin ? (
+          <>
+            <MenuDivider />
+            <Link href="/admin/dashboard">
+              <MenuItem>Admin Dashboard</MenuItem>
+            </Link>
+          </>
+        ) : null}
       </MenuList>
     </Menu>
   );
